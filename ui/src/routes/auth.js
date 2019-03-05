@@ -43,7 +43,8 @@ router.post("/auth/session/start", (req, res) => {
             };
             res.cookie("token", sessionCookie, {
               maxAge: expiresIn,
-              secure: cookieSecure
+              secure: cookieSecure,
+              sameSite: true
             });
             res.end(JSON.stringify({ status: "success" }));
           },
