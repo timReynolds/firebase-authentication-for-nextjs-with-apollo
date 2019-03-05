@@ -32,6 +32,7 @@ const uiConfig = {
     signInSuccessWithAuthResult: () => false
   }
 };
+firebaseInit();
 
 class Login extends Component {
   constructor(props) {
@@ -77,14 +78,14 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
+      <>
         <Head title="Home" />
         <Nav />
         <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
-      </div>
+      </>
     );
   }
 }

@@ -33,9 +33,7 @@ export default App => {
       const apollo = initApollo(
         {},
         {
-          getToken: () => parseCookies(req).session,
-          isServer: () => true,
-          getCookie: () => getCookie(req)
+          getToken: () => parseCookies(req).token
         }
       );
 
@@ -92,10 +90,8 @@ export default App => {
       // After that rendering is done using Next's normal rendering pipeline
       this.apolloClient = initApollo(props.apolloState, {
         getToken: () => {
-          return parseCookies().session;
-        },
-        isServer: () => false,
-        getCookie: () => getCookie(req)
+          return parseCookies().token;
+        }
       });
     }
 

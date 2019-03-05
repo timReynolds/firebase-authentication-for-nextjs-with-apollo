@@ -13,7 +13,6 @@ const firebase = firebaseAdmin.initializeApp({
 const router = express.Router();
 
 // TODO
-// CSRF token
 // https://firebase.google.com/docs/auth/admin/manage-cookies
 router.post("/auth/session/start", (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -40,10 +39,12 @@ router.post("/auth/session/start", (req, res) => {
             // Set cookie policy for session cookie.
             const options = {
               maxAge: expiresIn,
-              httpOnly: true,
               secure: cookieSecure
             };
-            res.cookie("session", sessionCookie, options);
+            res.cookie("token", sessionCookie, {
+              maxAge: expiresIn,
+              secure: cookieSecure
+            });
             res.end(JSON.stringify({ status: "success" }));
           },
           error => {
@@ -56,7 +57,7 @@ router.post("/auth/session/start", (req, res) => {
 
 // Clear the cookie without
 router.post("/auth/session/end", (req, res) => {
-  res.clearCookie("session");
+  res.clearCookie("token");
   res.json({ status: "success" });
 });
 

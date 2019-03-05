@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache } from "apollo-boost";
 import { createHttpLink } from "apollo-link-http";
+import { setContext } from "apollo-link-context";
 import fetch from "isomorphic-unfetch";
 
 let apolloClient = null;
@@ -9,24 +10,27 @@ if (!process.browser) {
   global.fetch = fetch;
 }
 
-function create(initialState, { getToken, isServer, getCookie }) {
-  const linkOptions = {
+function create(initialState, { getToken }) {
+  const httpLink = createHttpLink({
     uri: "http://localhost:4000",
-    credentials: "include"
-  };
+    credentials: "same-origin"
+  });
 
-  if (isServer()) {
-    linkOptions.headers = {
-      cookie: getCookie()
+  const authLink = setContext((_, { headers }) => {
+    const token = getToken();
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `Bearer ${token}` : ""
+      }
     };
-  }
-  const httpLink = createHttpLink(linkOptions);
+  });
 
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: httpLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache().restore(initialState || {})
   });
 }
