@@ -13,10 +13,6 @@ function parseCookies(req, options = {}) {
   );
 }
 
-function getCookie(req) {
-  return req ? req.headers.cookie || "" : "";
-}
-
 export default App => {
   return class WithData extends React.Component {
     static displayName = `WithData(${App.displayName})`;
