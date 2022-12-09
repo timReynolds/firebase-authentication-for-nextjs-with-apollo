@@ -10,7 +10,7 @@
     "apollo-link-context": "^1.0.14",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "firebase": "^5.8.4",
     "firebase-admin": "^7.0.0",
     "graphql": "^14.1.1",
